@@ -1,2 +1,2 @@
-# Home-assistant-configurations
+# Home Assistant Configurations
 Some Home Assistant Configurations for different things
