@@ -1,0 +1,59 @@
+# meter definitions
+# name can be freely chosen and is used as reference when assigning meters to site and loadpoints
+# for documentation see https://docs.evcc.io/docs/devices/meters
+meters:
+  - name: grid
+    type: custom
+    power:
+      source: mqtt
+      topic: pvdataevcc/grid/power
+      scale: -1
+    energy:
+      source: mqtt
+      topic: pvdataevcc/grid/imported
+
+  - name: pv
+    type: custom
+    power:
+      source: mqtt
+      topic: pvdataevcc/pv/power
+    energy:
+      source: mqtt
+      topic: pvdataevcc/pv/energy
+    currents:
+      - source: mqtt
+        topic: pvdataevcc/pv/current/l1
+      - source: mqtt
+        topic: pvdataevcc/pv/current/l2
+      - source: mqtt
+        topic: pvdataevcc/pv/current/l3
+
+  - name: battery
+    type: custom
+    power:
+      source: mqtt
+      topic: pvdataevcc/battery/power
+      scale: -1
+    energy:
+      source: mqtt
+      topic: pvdataevcc/battery/energy
+    soc:
+      source: mqtt
+      topic: pvdataevcc/battery/level
+
+# site describes the EVU connection, PV and home battery
+site:
+  title: Home # display name for UI
+  meters:
+    grid: grid # grid meter
+    pv:
+      - pv # list of pv inverters/ meters
+    battery:
+      - battery # list of battery meters
+  residualPower: 100 # additional household usage margin
+
+# mqtt message broker
+mqtt:
+   broker: IP-ADDRESS:PORT
+   user: MQTT_USER
+   password: MQTT_PASS
