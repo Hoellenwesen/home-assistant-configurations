@@ -2,47 +2,47 @@ alias: PV Daten zu EVCC via MQTT
 description: ""
 trigger:
   - platform: time_pattern
-    seconds: /5
+    seconds: "/5"
 condition: []
 action:
   - service: mqtt.publish
     data:
-      topic: pvdataevcc/grid/power
-      payload_template: " {{ states('sensor.export_power_raw') }} "
+      topic: "pvdataevcc/grid/power"
+      payload: "{{ states('sensor.export_power_raw') }}"
   - service: mqtt.publish
     data:
-      topic: pvdataevcc/grid/imported
-      payload_template: " {{ states('sensor.total_imported_energy') }} "
+      topic: "pvdataevcc/grid/imported"
+      payload: "{{ states('sensor.total_imported_energy') }}"
   - service: mqtt.publish
     data:
-      topic: pvdataevcc/pv/power
-      payload_template: " {{ states('sensor.total_dc_power') }} "
+      topic: "pvdataevcc/pv/power"
+      payload: "{{ states('sensor.total_dc_power') }}"
   - service: mqtt.publish
     data:
-      topic: pvdataevcc/pv/energy
-      payload_template: " {{ states('sensor.total_pv_generation') }} "
+      topic: "pvdataevcc/pv/energy"
+      payload: "{{ states('sensor.total_pv_generation') }}"
   - service: mqtt.publish
     data:
-      topic: pvdataevcc/pv/current/l1
-      payload_template: " {{ states('sensor.phase_a_current') }} "
+      topic: "pvdataevcc/pv/current/l1"
+      payload: "{{ states('sensor.phase_a_current') }}"
   - service: mqtt.publish
     data:
-      topic: pvdataevcc/pv/current/l2
-      payload_template: " {{ states('sensor.phase_b_current') }} "
+      topic: "pvdataevcc/pv/current/l2"
+      payload: "{{ states('sensor.phase_b_current') }}"
   - service: mqtt.publish
     data:
-      topic: pvdataevcc/pv/current/l3
-      payload_template: " {{ states('sensor.phase_c_current') }} "
+      topic: "pvdataevcc/pv/current/l3"
+      payload: "{{ states('sensor.phase_c_current') }}"
   - service: mqtt.publish
     data:
-      topic: pvdataevcc/battery/power
-      payload_template: " {{ states('sensor.signed_battery_power') }} "
+      topic: "pvdataevcc/battery/power"
+      payload: "{{ states('sensor.signed_battery_power') }}"
   - service: mqtt.publish
     data:
-      topic: pvdataevcc/battery/energy
-      payload_template: " {{ states('sensor.total_battery_discharge') }} "
+      topic: "pvdataevcc/battery/energy"
+      payload: "{{ states('sensor.total_battery_discharge') }}"
   - service: mqtt.publish
     data:
-      topic: pvdataevcc/battery/level
-      payload_template: " {{ states('sensor.battery_level') }} "
+      topic: "pvdataevcc/battery/level"
+      payload: "{{ states('sensor.battery_level') }}"
 mode: single
