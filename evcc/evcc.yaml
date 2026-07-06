@@ -40,6 +40,11 @@ meters:
     soc:
       source: mqtt
       topic: pvdataevcc/battery/level
+    # battery control: EVCC writes 1=normal, 2=hold, 3=charge
+    # HA must subscribe and translate to Sungrow EMS commands
+    batterymode:
+      source: mqtt
+      topic: pvdataevcc/battery/mode/set
 
 # site describes the EVU connection, PV and home battery
 site:

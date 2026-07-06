@@ -1,0 +1,92 @@
+alias: EVCC Battery Mode Control
+description: "Translate EVCC battery mode (1=normal, 2=hold, 3=charge) to Sungrow EMS commands via the mkaiser integration"
+trigger:
+  - platform: mqtt
+    topic: pvdataevcc/battery/mode/set
+condition: []
+action:
+  - choose:
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.payload == '1' }}"
+        sequence:
+          - service: select.select_option
+            target:
+              entity_id: select.ems_mode
+            data:
+              option: "Self-consumption mode (default)"
+          - service: select.select_option
+            target:
+              entity_id: select.battery_forced_charge_discharge
+            data:
+              option: "Stop (default)"
+          - service: number.set_value
+            target:
+              entity_id: number.battery_forced_charge_discharge_power
+            data:
+              value: 0
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.payload == '2' }}"
+        sequence:
+          - service: select.select_option
+            target:
+              entity_id: select.ems_mode
+            data:
+              option: "Forced mode"
+          - service: select.select_option
+            target:
+              entity_id: select.battery_forced_charge_discharge
+            data:
+              option: "Stop (default)"
+          - service: number.set_value
+            target:
+              entity_id: number.battery_forced_charge_discharge_power
+            data:
+              value: 0
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.payload == '3' }}"
+        sequence:
+          - service: select.select_option
+            target:
+              entity_id: select.ems_mode
+            data:
+              option: "Forced mode"
+          - service: select.select_option
+            target:
+              entity_id: select.battery_forced_charge_discharge
+            data:
+              option: "Forced charge"
+          - service: number.set_value
+            target:
+              entity_id: number.battery_forced_charge_discharge_power
+            data:
+              value: "{{ states('sensor.battery_max_charge_power') | int(5000) }}"
+mode: single
+
+---
+
+alias: EVCC Battery Mode Default on HA Start
+description: "Set Sungrow battery to self-consumption mode on Home Assistant startup"
+trigger:
+  - platform: homeassistant
+    event: start
+condition: []
+action:
+  - service: select.select_option
+    target:
+      entity_id: select.ems_mode
+    data:
+      option: "Self-consumption mode (default)"
+  - service: select.select_option
+    target:
+      entity_id: select.battery_forced_charge_discharge
+    data:
+      option: "Stop (default)"
+  - service: number.set_value
+    target:
+      entity_id: number.battery_forced_charge_discharge_power
+    data:
+      value: 0
+mode: single
